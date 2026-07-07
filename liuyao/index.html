@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>鴨鴨六爻</title>
+<meta name="theme-color" content="#EFE9DA">
+<style>
+  :root{
+    --paper:#EFE9DA; --card:#FAF6EC; --ink:#26231E; --ink-2:#5C574E;
+    --seal:#9E3B2E; --line:#DDD3BF; --link:#8A3527; --water:#3E7CB1;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--paper:#17150F; --card:#201D16; --ink:#E7E0D0; --ink-2:#A69E8C;
+      --seal:#D08A7C; --line:#322E24; --link:#E0A18F; --water:#7FB2DD;}
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0; background:var(--paper); color:var(--ink);
+    font-family:-apple-system,"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    line-height:1.85; letter-spacing:.01em;}
+  .serif{font-family:"Kaiti TC","STKaiti","Songti TC","Noto Serif TC",serif}
+  .note{text-align:center; font-size:.75rem; letter-spacing:.14em; color:var(--ink-2);
+    background:var(--card); border-bottom:1px solid var(--line); padding:.4rem}
+  .wrap{max-width:820px; margin:0 auto; padding:0 1.4rem}
+  .topbar{padding:1.2rem 0 .2rem}
+  .back{color:var(--ink-2); text-decoration:none; font-size:.95rem; letter-spacing:.04em}
+  .back:hover{color:var(--seal)}
+
+  .hero{text-align:center; padding:1.6rem 0 1rem}
+  .hero img.duck{width:132px; height:132px; filter:drop-shadow(0 10px 22px rgba(60,45,25,.2))}
+  .hero h1{font-size:2.4rem; font-weight:600; letter-spacing:.12em; margin:1rem 0 .3rem}
+  .hero .lead{color:var(--ink-2); font-size:1.05rem; max-width:24em; margin:.3rem auto 0}
+  .dl{margin:1.6rem 0 0; display:inline-flex; align-items:center; gap:.5rem;
+    padding:.55rem 1.3rem; border-radius:999px; border:1px solid var(--water);
+    color:var(--water); font-size:.95rem; letter-spacing:.05em; opacity:.75; cursor:default}
+
+  .sec-head{text-align:center; margin:3rem 0 1.4rem}
+  .sec-head h2{font-size:1.5rem; font-weight:600; letter-spacing:.06em; margin:0}
+  .sec-head p{margin:.3rem 0 0; color:var(--ink-2); font-size:.92rem}
+
+  .feat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:1rem}
+  .feat{display:flex; gap:.8rem; align-items:flex-start;
+    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:1.1rem}
+  .mini-seal{width:36px; height:36px; border-radius:6px; background:var(--water); color:#fff;
+    display:flex; align-items:center; justify-content:center; flex:none;
+    font-family:"Kaiti TC","STKaiti","Songti TC","Noto Serif TC",serif; font-size:18px;
+    box-shadow:0 0 0 2px var(--card) inset}
+  .feat h4{margin:0 0 .2rem; font-size:1.02rem; font-weight:600; letter-spacing:.04em}
+  .feat p{margin:0; font-size:.86rem; color:var(--ink-2); line-height:1.7}
+
+  /* phone frame */
+  .phone{border:1px solid var(--line); border-radius:22px; overflow:hidden;
+    background:#000; box-shadow:0 12px 28px rgba(60,45,25,.16); line-height:0}
+  .phone img{display:block; width:100%}
+
+  /* 排盤 carousel (pure CSS) */
+  .pan-demo{max-width:300px; margin:0 auto}
+  .pan-demo input{position:absolute; opacity:0; pointer-events:none}
+  .pan-tabs{display:flex; justify-content:center; gap:.5rem; margin-bottom:1rem}
+  .pan-tabs label{padding:.4rem 1.1rem; border-radius:999px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink-2); font-size:.9rem; cursor:pointer; letter-spacing:.05em}
+  .pan-demo .pan{display:none}
+  #p1:checked~.phone .s1, #p2:checked~.phone .s2, #p3:checked~.phone .s3{display:block}
+  #p1:checked~.pan-tabs label[for="p1"],
+  #p2:checked~.pan-tabs label[for="p2"],
+  #p3:checked~.pan-tabs label[for="p3"]{background:var(--water); color:#fff; border-color:var(--water)}
+
+  /* 起卦 4 / highlights */
+  .shot-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; align-items:start}
+  .shot{text-align:center}
+  .shot .cap{margin-top:.6rem; font-size:.9rem; color:var(--ink-2); letter-spacing:.05em}
+  .hl-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1rem}
+
+  footer{margin-top:3.4rem; border-top:1px solid var(--line);
+    padding:1.8rem 1.4rem 3rem; text-align:center; color:var(--ink-2); font-size:.9rem}
+  footer a{color:var(--link); text-decoration:none; margin:0 .5rem}
+
+  @media(max-width:640px){
+    .feat-grid{grid-template-columns:1fr}
+    .shot-grid{grid-template-columns:repeat(2,1fr)}
+    .hl-grid{grid-template-columns:repeat(2,1fr)}
+    .hero h1{font-size:2rem}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar"><a class="back" href="../">‹ 鴨鴨命理</a></div>
+
+    <section class="hero">
+      <img class="duck" src="../liuyao.png" alt="鴨鴨六爻">
+      <h1 class="serif">鴨鴨六爻</h1>
+      <p class="lead">擲銅錢或擲骰起卦，掌上完成六爻排盤與解卦筆記。</p>
+      <div><span class="dl">App Store 即將上架</span></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2 class="serif">六爻能做什麼</h2></div>
+      <div class="feat-grid">
+        <div class="feat"><span class="mini-seal">卦</span><div><h4>四種起卦</h4><p>擲銅錢、擲骰、報數、手動選爻，皆自動排盤。</p></div></div>
+        <div class="feat"><span class="mini-seal">盤</span><div><h4>完整排盤</h4><p>世應、六親、六神、動變、神煞，一應俱全。</p></div></div>
+        <div class="feat"><span class="mini-seal">錄</span><div><h4>記錄管理</h4><p>依命主、日期、自訂標籤分類，好收好找。</p></div></div>
+        <div class="feat"><span class="mini-seal">圖</span><div><h4>匯出排盤圖</h4><p>存成漂亮的排盤 PNG，隨手分享。</p></div></div>
+        <div class="feat"><span class="mini-seal">智</span><div><h4>AI 解卦提示詞</h4><p>一鍵整理卦象，貼到你慣用的 AI。</p></div></div>
+        <div class="feat"><span class="mini-seal">曆</span><div><h4>萬年曆查詢</h4><p>查任一日的干支、農曆與節氣，排盤好幫手。</p></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2 class="serif">排盤．三種格式</h2><p>同一卦，三種看法，隨你習慣切換</p></div>
+      <div class="pan-demo">
+        <input type="radio" name="pan" id="p1" checked>
+        <input type="radio" name="pan" id="p2">
+        <input type="radio" name="pan" id="p3">
+        <div class="pan-tabs">
+          <label for="p1">簡約</label><label for="p2">格線</label><label for="p3">經典</label>
+        </div>
+        <div class="phone">
+          <img class="pan s1" src="shots/pan_jianyue.jpg" alt="簡約排盤">
+          <img class="pan s2" src="shots/pan_gexian.jpg" alt="格線排盤">
+          <img class="pan s3" src="shots/pan_jingdian.jpg" alt="經典排盤">
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2 class="serif">起卦．四種方式</h2></div>
+      <div class="shot-grid">
+        <div class="shot"><div class="phone"><img src="shots/qi_coin.jpg" alt="銅錢起卦"></div><div class="cap">擲銅錢</div></div>
+        <div class="shot"><div class="phone"><img src="shots/qi_dice.jpg" alt="擲骰起卦"></div><div class="cap">擲骰</div></div>
+        <div class="shot"><div class="phone"><img src="shots/qi_number.jpg" alt="報數起卦"></div><div class="cap">報數</div></div>
+        <div class="shot"><div class="phone"><img src="shots/qi_manual.jpg" alt="手動選爻"></div><div class="cap">手動選爻</div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2 class="serif">更多畫面</h2></div>
+      <div class="hl-grid">
+        <div class="shot"><div class="phone"><img src="shots/hl_calendar.jpg" alt="萬年曆"></div><div class="cap">萬年曆查詢</div></div>
+        <div class="shot"><div class="phone"><img src="shots/hl_ai.jpg" alt="AI 解卦提示詞"></div><div class="cap">AI 解卦提示詞</div></div>
+        <div class="shot"><div class="phone"><img src="shots/hl_classic.jpg" alt="古書卦例"></div><div class="cap">古書卦例</div></div>
+        <div class="shot"><div class="phone"><img src="shots/hl_teach.jpg" alt="教學"></div><div class="cap">入門教學</div></div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <a href="../">返回鴨鴨命理</a>·<a href="privacy.html">隱私政策</a>·<a href="support.html">技術支援</a>
+  </footer>
+</body>
+</html>
