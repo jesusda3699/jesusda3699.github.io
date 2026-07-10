@@ -31,7 +31,9 @@
   }
   .wrap{max-width:680px; margin:0 auto; padding:2.6rem 1.4rem 4rem}
   header{margin-bottom:2.4rem}
-  .brand{display:flex; align-items:center; gap:.7rem; margin-bottom:1.4rem}
+  .brand{display:flex; align-items:center; gap:.7rem; margin-bottom:1.4rem;
+    text-decoration:none; color:inherit; width:fit-content}
+  .brand:hover .brand-name{color:var(--seal)}
   .seal{
     display:inline-flex; align-items:center; justify-content:center;
     width:44px; height:44px; border-radius:7px; background:var(--seal);
@@ -72,10 +74,10 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="brand">
+    <a class="brand" href="index.html">
       <span class="seal" aria-hidden="true">卜</span>
       <span class="brand-name">鴨鴨六爻</span>
-    </div>
+    </a>
     <h1>隱私政策</h1>
     <p class="meta">生效日期：<time datetime="2026-07-06">2026 年 7 月 6 日</time></p>
   </header>

@@ -31,7 +31,9 @@
   }
   .wrap{max-width:680px; margin:0 auto; padding:2.6rem 1.4rem 4rem}
   header{margin-bottom:2rem}
-  .brand{display:flex; align-items:center; gap:.7rem; margin-bottom:1.4rem}
+  .brand{display:flex; align-items:center; gap:.7rem; margin-bottom:1.4rem;
+    text-decoration:none; color:inherit; width:fit-content}
+  .brand:hover .brand-name{color:var(--seal)}
   .seal{
     display:inline-flex; align-items:center; justify-content:center;
     width:44px; height:44px; border-radius:7px; background:var(--seal);
@@ -80,10 +82,10 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="brand">
+    <a class="brand" href="index.html">
       <span class="seal" aria-hidden="true">卜</span>
       <span class="brand-name">鴨鴨六爻</span>
-    </div>
+    </a>
     <h1>技術支援</h1>
     <p class="intro">使用上遇到問題、有建議、或想回報狀況，都歡迎與我們聯絡。</p>
   </header>
@@ -99,7 +101,7 @@
 
     <details>
       <summary>如何起卦？</summary>
-      <p>鴨鴨六爻提供兩種起卦方式：<b>擲銅錢</b>與<b>擲骰起卦</b>。在主畫面選擇任一方式，依畫面指示完成即可自動排盤。</p>
+      <p>鴨鴨六爻提供三種起卦方式：<b>擲銅錢</b>、<b>擲骰</b>與<b>報數起卦</b>。在主畫面選擇任一方式，依畫面指示完成即可自動排盤。</p>
     </details>
 
     <details>
@@ -109,7 +111,7 @@
 
     <details>
       <summary>記錄可以存幾筆？</summary>
-      <p>免費版最多可儲存 30 筆卦記錄；購買「解鎖完整版」後即無上限。無論免費或完整版，所有既有記錄都能正常閱讀、編輯與匯出。</p>
+      <p>免費版最多可儲存 50 筆卦記錄；購買「解鎖完整版」後即無上限。無論免費或完整版，所有既有記錄都能正常閱讀、編輯與匯出。</p>
     </details>
 
     <details>
