@@ -4,17 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="個別要素法（2次元）と乱流モデルを連成し、清水・掃流状集合流動・土石流による河床の侵食と堆積、粒子1個に働く力や応力、濃度分布をブラウザで調べられるシミュレータ。">
+<meta property="og:url" content="https://kisakaki.github.io/https-kisakaki.github.io-sabo-dem-/dem/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="移動床DEM-流れ連成シミュレータ">
 <meta property="og:description" content="個別要素法（2次元）と乱流モデルを連成し、清水・掃流状集合流動・土石流による河床の侵食と堆積、粒子1個に働く力や応力、濃度分布をブラウザで調べられるシミュレータ。">
-<meta property="og:image" content="../og-dem.png">
+<meta property="og:image" content="https://kisakaki.github.io/https-kisakaki.github.io-sabo-dem-/og-dem.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="移動床DEM-流れ連成シミュレータ">
 <meta name="twitter:description" content="個別要素法（2次元）と乱流モデルを連成し、清水・掃流状集合流動・土石流による河床の侵食と堆積、粒子1個に働く力や応力、濃度分布をブラウザで調べられるシミュレータ。">
-<meta name="twitter:image" content="../og-dem.png">
+<meta name="twitter:image" content="https://kisakaki.github.io/https-kisakaki.github.io-sabo-dem-/og-dem.png">
 <title>移動床DEM-流れ連成シミュレータ</title>
 <style>
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -30,7 +31,7 @@ img{max-width:100%}
 /* Layout: 実験水路のコンソール — 左に操作ラック、右に水路窓と解析ベンチ。狭い画面では 水路窓 → 操作 → 解析 の1列 */
 :root{
   --bg:#e7ecef; --panel:#f8fafb; --ink:#13202a; --muted:#566773; --line:#ccd6dc;
-  --water:#25689a; --water-soft:#d5e5f1; --focus:#c46a1c; --lift:#1f8a7d; --cy:#7a56a8;
+  --water:#25689a; --water-soft:#d5e5f1; --focus:#c46a1c; --lift:#1f8a7d; --cy:#7a56a8; --fast:#9b2335;
   --grain-a:#dccaa4; --grain-b:#6f5944; --fixed:#59656e; --ok:#2e8657; --warn:#b37512; --cend:#5b4330;
   --f-display:"Zen Old Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
   --f-body:"IBM Plex Sans JP","Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;
@@ -39,11 +40,11 @@ img{max-width:100%}
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0c141a; --panel:#121d25; --ink:#dce6ec; --muted:#8a9ba8; --line:#22303a;
-  --water:#5aa5db; --water-soft:#12304a; --focus:#ec9a4e; --lift:#4fc2b2; --cy:#b294e0;
+  --water:#5aa5db; --water-soft:#12304a; --focus:#ec9a4e; --lift:#4fc2b2; --cy:#b294e0; --fast:#e8707a;
   --grain-a:#b9a786; --grain-b:#5a4734; --fixed:#3a464f; --ok:#4cb87f; --warn:#e0a640; --cend:#e3cfa4; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0c141a; --panel:#121d25; --ink:#dce6ec; --muted:#8a9ba8; --line:#22303a;
-  --water:#5aa5db; --water-soft:#12304a; --focus:#ec9a4e; --lift:#4fc2b2; --cy:#b294e0;
+  --water:#5aa5db; --water-soft:#12304a; --focus:#ec9a4e; --lift:#4fc2b2; --cy:#b294e0; --fast:#e8707a;
   --grain-a:#b9a786; --grain-b:#5a4734; --fixed:#3a464f; --ok:#4cb87f; --warn:#e0a640; --cend:#e3cfa4; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.6;padding-inline:16px;padding-block:14px 40px}
@@ -1009,8 +1010,8 @@ function hexRGB(c){c=(c||'').trim();if(c[0]==='#'){if(c.length===4)c='#'+c[1]+c[
 function mix(a,b,t){return 'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';}
 function rgba(a,al){return 'rgba('+a[0]+','+a[1]+','+a[2]+','+al+')';}
 function readTheme(){const cs=getComputedStyle(document.documentElement);
-  for(const k of ['bg','panel','ink','muted','line','water','water-soft','focus','lift','cy','grain-a','grain-b','fixed','ok','warn','cend'])T[k]=hexRGB(cs.getPropertyValue('--'+k));
-  LUTV=[];LUTS=[];for(let i=0;i<64;i++){LUTV.push(mix(T['grain-a'],T.water,i/63));LUTS.push(mix(T['grain-a'],T['grain-b'],i/63));}
+  for(const k of ['bg','panel','ink','muted','line','water','water-soft','focus','lift','cy','fast','grain-a','grain-b','fixed','ok','warn','cend'])T[k]=hexRGB(cs.getPropertyValue('--'+k));
+  LUTV=[];LUTS=[];for(let i=0;i<64;i++){LUTV.push(mix(T['grain-a'],T.fast,i/63));LUTS.push(mix(T['grain-a'],T['grain-b'],i/63));}
   LUTC=[];for(let i=0;i<=100;i++){const t=Math.pow(i/100,0.8),a=T.panel,b=T.cend;LUTC.push([Math.round(a[0]+(b[0]-a[0])*t),Math.round(a[1]+(b[1]-a[1])*t),Math.round(a[2]+(b[2]-a[2])*t)]);}
   ztDirty=true;
   T.mono='11px "IBM Plex Mono", ui-monospace, Menlo, monospace';}
@@ -1073,7 +1074,7 @@ function renderSim(){
     buckets[b].push(i);
   }
   for(let b=0;b<67;b++){const lst=buckets[b];if(!lst.length)continue;
-    ctx.fillStyle=b===64?rgba(T.fixed,1):b===65?rgba(T.water,1):b===66?mix(T['grain-a'],T.fixed,0.45):(P.color==='size'||P.color==='state'?LUTS[b]:LUTV[b]);
+    ctx.fillStyle=b===64?rgba(T.fixed,1):b===65?rgba(T.fast,1):b===66?mix(T['grain-a'],T.fixed,0.45):(P.color==='size'||P.color==='state'?LUTS[b]:LUTV[b]);
     ctx.beginPath();
     for(const i of lst){const r=Math.max(0.6,PR[i]*s*0.93),x=X(PX[i]),y=Y(PY[i]);
       ctx.moveTo(x+r,y);ctx.arc(x,y,r,0,2*PI);

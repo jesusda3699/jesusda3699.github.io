@@ -4,17 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="勾配が折れ曲がる水路で、定常供給・段波・清水による堆積と侵食、粒子と流体の動きを個別要素法でブラウザ上で調べられるシミュレータ。">
+<meta property="og:url" content="https://kisakaki.github.io/https-kisakaki.github.io-sabo-dem-/flume/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="勾配変化水路DEMシミュレータ">
 <meta property="og:description" content="勾配が折れ曲がる水路で、定常供給・段波・清水による堆積と侵食、粒子と流体の動きを個別要素法でブラウザ上で調べられるシミュレータ。">
-<meta property="og:image" content="../og-flume.png">
+<meta property="og:image" content="https://kisakaki.github.io/https-kisakaki.github.io-sabo-dem-/og-flume.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="勾配変化水路DEMシミュレータ">
 <meta name="twitter:description" content="勾配が折れ曲がる水路で、定常供給・段波・清水による堆積と侵食、粒子と流体の動きを個別要素法でブラウザ上で調べられるシミュレータ。">
-<meta name="twitter:image" content="../og-flume.png">
+<meta name="twitter:image" content="https://kisakaki.github.io/https-kisakaki.github.io-sabo-dem-/og-flume.png">
 <title>勾配変化水路DEMシミュレータ</title>
 <style>
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -30,7 +31,7 @@ img{max-width:100%}
 /* Layout: 実験水路のコンソール — 左に操作ラック、右に水路窓と解析ベンチ。狭い画面では 水路窓 → 操作 → 解析 の1列 */
 :root{
   --bg:#e7ecef; --panel:#f8fafb; --ink:#13202a; --muted:#566773; --line:#ccd6dc;
-  --water:#25689a; --water-soft:#d5e5f1; --focus:#c46a1c; --lift:#1f8a7d; --cy:#7a56a8;
+  --water:#25689a; --water-soft:#d5e5f1; --focus:#c46a1c; --lift:#1f8a7d; --cy:#7a56a8; --fast:#9b2335;
   --grain-a:#dccaa4; --grain-b:#6f5944; --fixed:#59656e; --ok:#2e8657; --warn:#b37512; --cend:#5b4330;
   --f-display:"Zen Old Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
   --f-body:"IBM Plex Sans JP","Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;
@@ -39,11 +40,11 @@ img{max-width:100%}
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0c141a; --panel:#121d25; --ink:#dce6ec; --muted:#8a9ba8; --line:#22303a;
-  --water:#5aa5db; --water-soft:#12304a; --focus:#ec9a4e; --lift:#4fc2b2; --cy:#b294e0;
+  --water:#5aa5db; --water-soft:#12304a; --focus:#ec9a4e; --lift:#4fc2b2; --cy:#b294e0; --fast:#e8707a;
   --grain-a:#b9a786; --grain-b:#5a4734; --fixed:#3a464f; --ok:#4cb87f; --warn:#e0a640; --cend:#e3cfa4; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0c141a; --panel:#121d25; --ink:#dce6ec; --muted:#8a9ba8; --line:#22303a;
-  --water:#5aa5db; --water-soft:#12304a; --focus:#ec9a4e; --lift:#4fc2b2; --cy:#b294e0;
+  --water:#5aa5db; --water-soft:#12304a; --focus:#ec9a4e; --lift:#4fc2b2; --cy:#b294e0; --fast:#e8707a;
   --grain-a:#b9a786; --grain-b:#5a4734; --fixed:#3a464f; --ok:#4cb87f; --warn:#e0a640; --cend:#e3cfa4; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.6;padding-inline:16px;padding-block:14px 40px}
@@ -1247,8 +1248,8 @@ function css(c){return 'rgb('+c[0]+','+c[1]+','+c[2]+')';}
 function rgba(a,al){return 'rgba('+a[0]+','+a[1]+','+a[2]+','+al+')';}
 let xtDirty=true;
 function readTheme(){const cs=getComputedStyle(document.documentElement);
-  for(const k of ['bg','panel','ink','muted','line','water','water-soft','focus','lift','cy','grain-a','grain-b','fixed','ok','warn','cend'])T[k]=hexRGB(cs.getPropertyValue('--'+k));
-  LUTV=[];LUTS=[];for(let i=0;i<64;i++){LUTV.push(css(mixc(T['grain-a'],T.water,i/63)));LUTS.push(css(mixc(T['grain-a'],T['grain-b'],i/63)));}
+  for(const k of ['bg','panel','ink','muted','line','water','water-soft','focus','lift','cy','fast','grain-a','grain-b','fixed','ok','warn','cend'])T[k]=hexRGB(cs.getPropertyValue('--'+k));
+  LUTV=[];LUTS=[];for(let i=0;i<64;i++){LUTV.push(css(mixc(T['grain-a'],T.fast,i/63)));LUTS.push(css(mixc(T['grain-a'],T['grain-b'],i/63)));}
   LUTC=[];LUTH=[];LUTD=[];for(let i=0;i<=100;i++){const t=Math.pow(i/100,0.8);LUTC.push(mixc(T.panel,T.cend,t));LUTH.push(mixc(T.panel,T.water,t));}
   for(let i=0;i<=200;i++){const v=(i-100)/100;LUTD.push(v<0?mixc(T.panel,T.water,Math.pow(-v,0.8)):mixc(T.panel,T.cend,Math.pow(v,0.8)));}
   T.mono='11px "IBM Plex Mono", ui-monospace, Menlo, monospace';xtDirty=true;}
@@ -1289,7 +1290,7 @@ function bucketOf(i,uref){const run=SIM.phase==='run';
   if(P.color==='vel'){let t=PVX[i]/uref;if(!run)t=0;return Math.max(0,Math.min(63,Math.round(t*63)));}
   if(P.color==='size'){if(SIM.dmax===SIM.dmin)return 32;return Math.max(0,Math.min(63,Math.round((2*PR[i]-SIM.dmin)/(SIM.dmax-SIM.dmin)*63)));}
   return PFIX[i]===3?66:isStatic(i)?40:65;}
-function bucketFill(b){return b===64?rgba(T.fixed,1):b===65?rgba(T.water,1):b===66?css(mixc(T['grain-a'],T.fixed,0.45)):(P.color==='size'||P.color==='state'?LUTS[b]:LUTV[b]);}
+function bucketFill(b){return b===64?rgba(T.fixed,1):b===65?rgba(T.fast,1):b===66?css(mixc(T['grain-a'],T.fixed,0.45)):(P.color==='size'||P.color==='state'?LUTS[b]:LUTV[b]);}
 function uRef(){let m=0.3;for(let j=0;j<FL.nx;j++){if(FL.h[j]>0.5*dd()){const u=FL.Qs[j]/FL.h[j];if(u>m)m=u;}}return m;}
 
 /* ---------- overview ---------- */
@@ -1314,7 +1315,7 @@ function renderOverview(){
   if(SIM.phase==='run'){
     ctx.fillStyle=rgba(T.water,0.18);ctx.beginPath();
     for(let j=0;j<FL.nx;j++){if(FL.h[j]<0.05*d)continue;ctx.rect(X(j*FL.dx),Y(FL.eta[j]),FL.dx*sc+0.6,(FL.eta[j]-FL.zb[j])*sc);}ctx.fill();
-    ctx.strokeStyle=rgba(T.water,1);ctx.lineWidth=1.5;ctx.lineJoin='round';ctx.beginPath();let pen=false;
+    ctx.strokeStyle=rgba(T.water,1);ctx.lineWidth=2;ctx.lineJoin='round';ctx.beginPath();let pen=false;
     for(let j=0;j<FL.nx;j++){if(FL.h[j]<0.05*d){pen=false;continue;}const x=X((j+0.5)*FL.dx),y=Y(FL.eta[j]);if(pen)ctx.lineTo(x,y);else{ctx.moveTo(x,y);pen=true;}}ctx.stroke();}
   // 拡大範囲・測点
   const zw=+$('zoomw').value*d,zc=zoomCenter();
@@ -1366,7 +1367,7 @@ function renderZoomView(){
   if(run){
     ctx.setLineDash([5,4]);ctx.strokeStyle=rgba(T.ink,0.55);ctx.lineWidth=1;ctx.beginPath();
     for(let j=ja;j<=jb;j++){const x=X((j+0.5)*FL.dx),y=Y(FL.zb[j]);j===ja?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();ctx.setLineDash([]);
-    ctx.strokeStyle=rgba(T.water,1);ctx.lineWidth=1.5;ctx.beginPath();let pen=false;
+    ctx.strokeStyle=rgba(T.water,1);ctx.lineWidth=2;ctx.beginPath();let pen=false;
     for(let j=ja;j<=jb;j++){if(FL.h[j]<0.02*d){pen=false;continue;}const x=X((j+0.5)*FL.dx),y=Y(FL.eta[j]);if(pen)ctx.lineTo(x,y);else{ctx.moveTo(x,y);pen=true;}}ctx.stroke();
   }
   // 折れ点・測点
