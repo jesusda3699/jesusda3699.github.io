@@ -1310,6 +1310,12 @@ function renderOverview(){
   for(let i=0;i<N;i++){if(i===FOC)continue;bk[bucketOf(i,uref)].push(i);}
   for(let b=0;b<67;b++){const l=bk[b];if(!l.length)continue;ctx.fillStyle=bucketFill(b);ctx.beginPath();
     for(const i of l){const r=Math.max(0.7,PR[i]*sc*0.95),x=X(PX[i]),y=Y(PY[i]);ctx.moveTo(x+r,y);ctx.arc(x,y,r,0,2*PI);}ctx.fill();}
+  // 水：全体図は縦に縮むので、流れの層に薄く水色を重ね、水面を線で描く
+  if(SIM.phase==='run'){
+    ctx.fillStyle=rgba(T.water,0.18);ctx.beginPath();
+    for(let j=0;j<FL.nx;j++){if(FL.h[j]<0.05*d)continue;ctx.rect(X(j*FL.dx),Y(FL.eta[j]),FL.dx*sc+0.6,(FL.eta[j]-FL.zb[j])*sc);}ctx.fill();
+    ctx.strokeStyle=rgba(T.water,1);ctx.lineWidth=1.5;ctx.lineJoin='round';ctx.beginPath();let pen=false;
+    for(let j=0;j<FL.nx;j++){if(FL.h[j]<0.05*d){pen=false;continue;}const x=X((j+0.5)*FL.dx),y=Y(FL.eta[j]);if(pen)ctx.lineTo(x,y);else{ctx.moveTo(x,y);pen=true;}}ctx.stroke();}
   // 拡大範囲・測点
   const zw=+$('zoomw').value*d,zc=zoomCenter();
   ctx.strokeStyle=rgba(T.ink,0.8);ctx.lineWidth=1.2;ctx.strokeRect(X(zc-zw/2),1,zw*sc,H-2);
